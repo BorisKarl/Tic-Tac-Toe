@@ -1,0 +1,41 @@
+* { margin: 0;
+    padding: 0;
+}
+
+
+#msg{
+    text-align: center;
+
+}
+
+h1 {
+    color: blueviolet;
+    text-align: center;
+}
+
+.container {
+    margin: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gameboard {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    height: 20em;
+    width: 20em;
+    gap: 0;
+    
+}
+
+
+#game_board > div {
+    text-align: center;
+    font-size: 4em;
+    color: red;
+    border: black solid 1px;
+    
+}
+
+        

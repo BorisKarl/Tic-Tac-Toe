@@ -20,21 +20,30 @@ const Player = (sign) => {
 }
 
 const x_sign = (() => {
-    for (let i = 1; i < 10; i++) {
-        let eDiv = document.getElementById(i);
-        eDiv.addEventListener('click', (e) => {
-            if (e.target.innerHTML == i) {
+    const xFunction = (e) => {
+        if (e.target.innerHTML == "") {
                 e.target.innerHTML = "X";
                 msg.innerHTML = "Player O turn";
-            }
-            else {
-                e.target.innerHTML = i;
-                msg.innerHTML = "Player X turn";
-            }
-            
-        })
-    }
+        }
+    };
+  
+    for (let i = 1; i < 10; i++) {
+        let eDiv = document.getElementById(i);
+        
+        eDiv.addEventListener('click', xFunction, {once: true}); 
+        // eDiv.addEventListener('click', oFunction(), { once: true});
+    };
 })();
+/*
+    const oSign() = const oFunction = (e) => {
+    if (e.target.innerHTML == "") {
+        e.target.innerHTML = "O";
+        msg.innerHTML = "Player Y turn";
+    }
+};
+    */
+
+
 
 const number_sign = (() => {
     for (let i = 1; i < 10; i++) {

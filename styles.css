@@ -30,7 +30,7 @@ h1 {
 }
 
 
-#game_board > div {
+.s_feld {
     text-align: center;
     font-size: 4em;
     color: red;
@@ -38,4 +38,9 @@ h1 {
     
 }
 
-        
+.button_wrapper {
+    margin-top: 2em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

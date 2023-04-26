@@ -1,111 +1,169 @@
 "use strict";
 
-const game_board = document.getElementById('game_board');
-const msg = document.getElementById('msg');
+const reset_button = document.getElementById('reset');
 
-const showData = (e) => {
-    let data = e.target.id;
-    console.log(data)
-    return data;
+
+function showId(e) {
+    let id = e.target.id;
+    console.log(id);
+    console.log("Funktion getRound mit dem Wert " + spielObject.getRound())
+    
 }
 
-
-const playfield = (() =>  {
-    const board = ["", "", "", "", "", "", "", "", ""];
-})();
-
-const Player = (sign) => {
-
-
-}
-
-const x_sign = (() => {
-    const xFunction = (e) => {
-        if (e.target.innerHTML == "") {
-                e.target.innerHTML = "X";
-                msg.innerHTML = "Player O turn";
-        }
-    };
-  
-    for (let i = 1; i < 10; i++) {
-        let eDiv = document.getElementById(i);
-        
-        eDiv.addEventListener('click', xFunction, {once: true}); 
-        // eDiv.addEventListener('click', oFunction(), { once: true});
-    };
-})();
-/*
-    const oSign() = const oFunction = (e) => {
-    if (e.target.innerHTML == "") {
-        e.target.innerHTML = "O";
-        msg.innerHTML = "Player Y turn";
-    }
+// Player Factory
+const Spieler = (sign) => {
+    return { sign }
 };
-    */
 
 
+const spielBrett = (() => {
 
-const number_sign = (() => {
-    for (let i = 1; i < 10; i++) {
-        let eDiv = document.getElementById(i);
-        eDiv.addEventListener('click', (e) => {
-            if (e.target.innerHTML > "0" || e.target.innerHTML < "10")
-            {
+    let brett = ["", "", "", "", "", "", "", "", ""];
+
+    const setBrett = (index, sign) => {
+        brett[index] = sign;
+    };
+
+    const getBrett = (index) => {
+        return brett[index];
+    }
+
+    const zeigBrett = () => {
+        console.log(brett);
+    }
+   
+    const reset = () => {
+        for (let i = 0; i < brett.length; i++)
+        {
+            brett[i] = "";
+        }
+    }
+
+ return { setBrett, getBrett, zeigBrett, reset };
+})();
+
+
+const anzeige = (() => {
+    const felder = document.querySelectorAll(".s_feld");
+    const brettAnzeige = document.getElementById("brettanzeige");
+    const msg = document.getElementById('msg');
+    brettAnzeige.addEventListener('click', spielBrett.zeigBrett);
+
+    const makeBrett = () => {
+        for(let i = 0; i < felder.length; i++) {
+            felder[i].textContent = spielBrett.getBrett(i);
+        }
+    }
+   
+    // show ID of div
+    felder.forEach(feld => {
+        feld.addEventListener('click', showId)
+    });
+
+    // Set eventListener that starts the game
+    felder.forEach(feld => {
+        feld.addEventListener('click', (e) => {
+            if (e.target.textContent == "" && !spielObject.getEnd()) {
+                spielObject.spielRunde(parseInt(e.target.id))
+            }else{
                 return;
             }
-            else
-            {
-                e.target.innerHTML = i;
-            }
             
-        })
-    }
+        });
+    });
+
+    return { makeBrett }
+
 })();
 
 
+const spielObject = (() => {
+    let round = 1;
+    const mrX = Spieler("X");
+    const mrO = Spieler("O");
+    let end = false;
 
-/* 
-// This works inside the playfield function
-+ const player_move = () => {
-+     player_square = document.getElementById(showData);
-+     player_square.innerHTML = "X";
-}; 
-one.addEventListener('click', player_move);
+    const get_Spieler = () => {
+        if(round % 2 == 1) {
+            console.log("Runde " + round)
+            return mrX.sign;
+        }else{
+            console.log("Runde " + round)
+            return mrO.sign;
+        }
+    };
 
-*/
- 
-
-const fill_array = () => {
-    let square_array = [];
-    for(let i = 0; i < 9; i++) {
-
+    const getEnd = () => {
+        return end;
     }
+
+    const checkForVictory = (feld_index) => {
+        const winCombo = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ]
+
+        const antwort = winCombo.filter((c) => c.includes(feld_index))
+                                .some((d) => d.every((index) => spielBrett
+                                .getBrett(index) == get_Spieler()));
+
+        console.log("Feld_index " + feld_index);
+        console.log("Console " + antwort);
+        console.log(get_Spieler())
+        console.log(winCombo.filter((combo) => combo.includes(feld_index)));
+        console.log(spielBrett.getBrett(feld_index));
+
+        if (antwort) {
+            end = true;
+            let winner = "Spieler " + get_Spieler();
+            msg.textContent = winner + " gewinnt!";
+        } else {
+            round++;
+            end = false;
+        }
+    }
+
+    const spielRunde = (feld_index) => {
+        spielBrett.setBrett(feld_index, get_Spieler());
+        anzeige.makeBrett();
+        console.log("Zu Ende? " + end);
+        if (round === 9){
+             checkForVictory(feld_index);
+             end = true;
+             msg.textContent = "Spiel vorbei! Unentschieden";
+            return 0;
+        }else if(!end) {
+            spielBrett.setBrett(feld_index, get_Spieler());
+            anzeige.makeBrett();
+            checkForVictory(feld_index);
+        }else if(end){
+            return;
+        }
+        
+    }  
+
+    const getRound = () => {
+        return round;
+    }
+
+    const reset_function = () => {
+        spielBrett.reset();
+        anzeige.makeBrett();
+        round = 1;
+        end = false;
+    }
+
+    return { spielRunde, reset_function, getEnd, getRound };
 }
+)();
 
- 
-const one = document.getElementById('1');
-const brett = document.createElement('div');
-
-
-
-
-/*
-one.addEventListener('click', (e) => {
-    document.getElementById(e.target.id).innerHTML = "X";})
- +const one = document.getElementById('1')
-
-const one = document.getElementById('1')
-const one = document.getElementById('1')
-const one = document.getElementById('1')
-const one = document.getElementById('1')
-square.addEventListener('click', player_move);
- */
-
-
-
-
-
-
+reset_button.addEventListener('click', spielObject.reset_function);
 
 
 

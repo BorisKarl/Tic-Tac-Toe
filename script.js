@@ -2,13 +2,16 @@
 
 const reset_button = document.getElementById('reset');
 
-
+// function for checking id 
+/*
 function showId(e) {
     let id = e.target.id;
     console.log(id);
     console.log("Funktion getRound mit dem Wert " + spielObject.getRound())
     
 }
+*/
+
 
 // Player Factory
 const Spieler = (sign) => {
@@ -27,7 +30,7 @@ const spielBrett = (() => {
     const getBrett = (index) => {
         return brett[index];
     }
-
+    // check the board via click, button disabled
     const zeigBrett = () => {
         console.log(brett);
     }
@@ -55,10 +58,13 @@ const anzeige = (() => {
         }
     }
    
-    // show ID of div
-    felder.forEach(feld => {
+    // show ID of div, disabled
+    /*
+        felder.forEach(feld => {
         feld.addEventListener('click', showId)
     });
+    */
+    
 
     // Set eventListener that starts the game
     felder.forEach(feld => {

@@ -9,12 +9,13 @@
 }
 
 h1 {
-    color: blueviolet;
+    padding-top: 2em;
+    color: black;
     text-align: center;
 }
 
 .container {
-    margin: 200px;
+    margin: 5%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -23,19 +24,22 @@ h1 {
 .gameboard {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    height: 20em;
-    width: 20em;
-    gap: 0;
-    
+    height: 300px;
+    width: 300px;
+    gap: 0px;
 }
 
 
 .s_feld {
-    text-align: center;
-    font-size: 4em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bolder;
+    font-size: 90px;
     color: red;
-    border: black solid 1px;
-    
+    border: black solid 3px;
+    height: 100px;
+    width: 100px;
 }
 
 .button_wrapper {
@@ -43,4 +47,15 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: center;
+    font-style: normal;
+}
+
+#reset {
+    color: whitesmoke;
+    font-size: large;
+
+}
+
+#brettanzeige {
+    display: none;
 }

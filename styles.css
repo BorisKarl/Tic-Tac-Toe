@@ -5,6 +5,7 @@
 
 #msg{
     text-align: center;
+    font-size: 2em;
 
 }
 
@@ -12,10 +13,12 @@ h1 {
     padding-top: 2em;
     color: black;
     text-align: center;
+    padding-bottom: 2%;
 }
 
+
 .container {
-    margin: 5%;
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -24,8 +27,8 @@ h1 {
 .gameboard {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    height: 300px;
-    width: 300px;
+    height: 450px;
+    width: 450px;
     gap: 0px;
 }
 
@@ -35,12 +38,13 @@ h1 {
     align-items: center;
     justify-content: center;
     font-weight: bolder;
-    font-size: 90px;
+    font-size: 140px;
     color: red;
-    border: black solid 3px;
-    height: 100px;
-    width: 100px;
+    border: black solid 1px;
+    height: 150px;
+    width: 150px;
 }
+
 
 .button_wrapper {
     margin-top: 2em;
@@ -51,6 +55,7 @@ h1 {
 }
 
 #reset {
+    margin: 2%;
     color: whitesmoke;
     font-size: large;
 

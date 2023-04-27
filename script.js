@@ -1,6 +1,7 @@
 "use strict";
 
 const reset_button = document.getElementById('reset');
+reset_button.style.visibility = "hidden";
 
 // function for checking id 
 /*
@@ -18,15 +19,18 @@ const Spieler = (sign) => {
     return { sign }
 };
 
-
+// Gameboard module
 const spielBrett = (() => {
 
+    // Array for data input
     let brett = ["", "", "", "", "", "", "", "", ""];
 
+    // Set the gameboard-data on the display
     const setBrett = (index, sign) => {
         brett[index] = sign;
     };
 
+    // Get the gameboard-data from array
     const getBrett = (index) => {
         return brett[index];
     }
@@ -35,6 +39,7 @@ const spielBrett = (() => {
         console.log(brett);
     }
    
+    // Reset for new game
     const reset = () => {
         for (let i = 0; i < brett.length; i++)
         {
@@ -46,6 +51,7 @@ const spielBrett = (() => {
 })();
 
 
+// Display module
 const anzeige = (() => {
     const felder = document.querySelectorAll(".s_feld");
     const brettAnzeige = document.getElementById("brettanzeige");
@@ -82,27 +88,34 @@ const anzeige = (() => {
 
 })();
 
-
+// Game module
 const spielObject = (() => {
+    // Declare variables
     let round = 1;
     const mrX = Spieler("X");
     const mrO = Spieler("O");
     let end = false;
+    const spielender = "Spieler "; 
+    // PLayer X begins the game
+    msg.innerHTML = spielender + "<span style='color: red;'>" + mrX.sign + "</span>" + " ist an der Reihe!";
+
 
     const get_Spieler = () => {
         if(round % 2 == 1) {
-            console.log("Runde " + round)
+            msg.innerHTML = spielender + "<span style='color: red;'>" + mrO.sign + "</span>" + " ist an der Reihe!";
             return mrX.sign;
         }else{
-            console.log("Runde " + round)
+            msg.innerHTML = spielender + "<span style='color: red;'>" + mrX.sign + "</span>" + " ist an der Reihe!";
             return mrO.sign;
         }
     };
 
+    // Is this the end?
     const getEnd = () => {
         return end;
     }
 
+    // The winner filters, includes and gets it all 
     const checkForVictory = (feld_index) => {
         const winCombo = [
             [0, 1, 2],
@@ -119,30 +132,35 @@ const spielObject = (() => {
                                 .some((d) => d.every((index) => spielBrett
                                 .getBrett(index) == get_Spieler()));
 
-        console.log("Feld_index " + feld_index);
-        console.log("Console " + antwort);
-        console.log(get_Spieler())
-        console.log(winCombo.filter((combo) => combo.includes(feld_index)));
-        console.log(spielBrett.getBrett(feld_index));
-
+        /* // Console.log and check data
+           console.log("Feld_index " + feld_index);
+           console.log("Console " + antwort);
+           console.log(get_Spieler())
+           console.log(winCombo.filter((combo) => combo.includes(feld_index)));
+           console.log(spielBrett.getBrett(feld_index));
+        */
+        
+        
         if (antwort) {
+            reset_button.style.visibility = "visible";
             end = true;
             let winner = "Spieler " + get_Spieler();
-            msg.textContent = winner + " gewinnt!";
+            msg.innerHTML = "<span style='color: red;'>" + winner + " gewinnt!" + "</span>";
         } else {
             round++;
             end = false;
         }
     }
 
+    // Play game function
     const spielRunde = (feld_index) => {
         spielBrett.setBrett(feld_index, get_Spieler());
         anzeige.makeBrett();
-        console.log("Zu Ende? " + end);
         if (round === 9){
              checkForVictory(feld_index);
              end = true;
-             msg.textContent = "Spiel vorbei! Unentschieden";
+             reset_button.style.visibility = "visible";
+             msg.textContent = "Spiel vorbei! Unentschieden...";
             return 0;
         }else if(!end) {
             spielBrett.setBrett(feld_index, get_Spieler());
@@ -153,19 +171,25 @@ const spielObject = (() => {
         }
         
     }  
-
-    const getRound = () => {
-        return round;
-    }
-
+    // Function for tracking th rounds, disabled
+    /*
+        const getRound = () => {
+            return round;
+        }
+    */
+    
+    // Reset
     const reset_function = () => {
+        msg.innerHTML = spielender + "<span style='color: red;'>" + mrX.sign + "</span>" + " ist an der Reihe!";
         spielBrett.reset();
         anzeige.makeBrett();
         round = 1;
         end = false;
+        reset_button.style.visibility = "hidden";
+
     }
 
-    return { spielRunde, reset_function, getEnd, getRound };
+    return { spielRunde, reset_function, getEnd };
 }
 )();
 
